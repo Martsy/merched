@@ -1,0 +1,27 @@
+<h1>"All Products"</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th>Product</th>
+    <th>Price</th>
+    <th>Stock</th>
+  </tr>
+  <% @products.each do |product| %>
+    <tr>
+      <td><%= link_to image_tag("products/#{product.image_url}"), product_path(product) %></td>
+      <td>
+        <span class="product_title">
+          <%= link_to product.title, product_path(product) %>
+        </span>
+        <%= product.description %>
+      </td>
+      <td><%= print_price(product.price) %></td>
+      <%# <!-- <td><%= print_stock(product.stock) %></td> --> %>
+      <%# <!-- <td><%= button_to "Add to Cart", order_items_path(:product_id => product) %></td> --> %>
+    </tr>
+  <% end %>
+
+</table>
+
+<p><%= link_to "Create a New Product", new_product_path, :id => "new_product" %></p>
