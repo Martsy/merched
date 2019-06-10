@@ -6,6 +6,8 @@ class Product < ApplicationRecord
                                     only_integer: true,
                                     message: 'must be a whole number and greater than zero'
 
+  has_many :order_items
+
   def price=(input)
     input.delete!('$')
     super
