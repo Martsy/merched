@@ -1,4 +1,5 @@
 class OrderItemsController < ApplicationController
+  before_action :load_order, only: [:create]
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
   # GET /order_items
@@ -24,11 +25,11 @@ class OrderItemsController < ApplicationController
   # POST /order_items
   # POST /order_items.json
   def create
-    @order_item = OrderItem.new(order_item_params)
+    @order_item = @order.order_items.new(quantity: 1, product_id: params[:product_id])
 
     respond_to do |format|
       if @order_item.save
-        format.html { redirect_to @order_item, notice: 'Order item was successfully created.' }
+        format.html { redirect_to @order, notice: 'Order item was successfully created.' }
         format.json { render :show, status: :created, location: @order_item }
       else
         format.html { render :new }
@@ -62,13 +63,23 @@ class OrderItemsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order_item
-      @order_item = OrderItem.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_item_params
-      params.require(:order_item).permit(:product_id, :order_id, :quantity)
+  # Use callbacks to share common setup or constraints between actions.
+
+  def load_order
+    @order = Order.find_or_initialize_by(id: session[:order_id], status: 'unsubmitted')
+    if @order.new_record?
+      @order.save!
+      session[:order_id] = @order.id
     end
+  end
+
+  def set_order_item
+    @order_item = OrderItem.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def order_item_params
+    params.require(:order_item).permit(:product_id, :order_id, :quantity)
+  end
 end
