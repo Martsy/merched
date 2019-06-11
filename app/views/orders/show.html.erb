@@ -42,4 +42,4 @@
     </tr>
 
   </table>
-  <%= link_to "Empty Cart", @order, :confirm => 'Are you sure?', :method => :delete %>
+  <%= link_to 'Empty Cart', @order, data: { confirm: 'Are you sure?' }, method: :delete %>
