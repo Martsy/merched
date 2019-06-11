@@ -1,6 +1,6 @@
 <h1>Your Order</h1>
 
-<table>
+  <table>
   <tr>
     <th>Customer</th>
     <td><%= @order.user_id %></td>
@@ -20,7 +20,15 @@
     <th>Unit Price</th>
     <th>Subtotal</th>
   </tr>
-    <% @order.order_items.each do |item| %>
-
+  <% @order.order_items.each do |item| %>
+    <tr>
+      <td><%= link_to image_tag "products/#{item.product.image_url}" %></td>
+      <td><%= item.product.title %></td>
+      <td><%= link_to item.quantity, edit_order_item_path(item) %></td>
+      <td><%= print_price(item.product.price) %></td>
+      <td><%= %></td>
+      <td><%= link_to "Remove", item, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
     <% end %>
-</table>
+  </table>
+  <%= link_to "Empty Cart", @order, :confirm => 'Are you sure?', :method => :delete %>
